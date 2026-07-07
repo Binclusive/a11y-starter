@@ -14,3 +14,5 @@ export function CloseButton() {
     </IconButton>
   );
 }
+
+// demo edit (keeps the bug) — see README step 2

@@ -11,3 +11,5 @@ export function Hero() {
     </section>
   );
 }
+
+// demo edit (keeps the bug) — see README step 2
