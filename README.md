@@ -9,9 +9,11 @@ secret, no config. It takes under five minutes.
 
 1. **Use this template** — click **Use this template → Create a new repository**
    (or fork it). You get your own copy with the workflow already wired up.
-2. **Open a pull request** that changes one of the `src/*.tsx` files. The check
+2. **Open a pull request** that touches all three `src/*.tsx` files. The check
    scans the **changed** `.tsx` files on the PR — the diff, not the whole tree —
-   so edit a seeded component (or just the copyright year in one) and push.
+   so to see all three findings, make a trivial edit to each seeded component
+   (keep the bug — e.g. add a blank line or a comment) and push. Touch only one
+   file and you will see only that file's finding.
 3. **Read the findings** on the PR — three surfaces, all on your own GitHub:
 
    | Where | What you see |
@@ -45,7 +47,7 @@ Reading the call site to catch those is the point of the Binclusive check.
 
 ```bash
 pnpm install
-pnpm scan ./src
+pnpm scan
 ```
 
 It prints the same findings your PR will show.

@@ -1,4 +1,4 @@
-// SEEDED BUG (3 of 3): image with no alt text — WCAG 1.1.1, enforce/image-no-alt.
+// SEEDED BUG (3 of 3): image with no alt text — WCAG 1.1.1, jsx-a11y/alt-text.
 // A blind user gets nothing for this image: no `alt`, no aria-label. Screen
 // readers may read the filename instead, which is noise.
 // FIX: add alt that conveys meaning — alt="Team collaborating at a whiteboard" —

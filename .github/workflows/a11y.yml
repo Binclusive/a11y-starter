@@ -19,9 +19,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history: the scan diffs base...head to find the changed .tsx.
+          # The default shallow clone (depth 1) lacks the base commit, so that
+          # diff fails and nothing gets scanned.
+          fetch-depth: 0
       - id: a11y
         uses: Binclusive/a11y@v0.1.1
-      - if: always() # advisory gate exits 0; upload regardless of findings
+      # Upload only when the scan produced a SARIF file. Gating on the output
+      # (empty when the scan step itself failed) avoids a second red — an
+      # unconditional always() would run upload-sarif with no sarif_file.
+      - if: steps.a11y.outputs.sarif-file != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ steps.a11y.outputs.sarif-file }}
