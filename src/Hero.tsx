@@ -11,3 +11,5 @@ export function Hero() {
     </section>
   );
 }
+
+// prove v0.1.2 action runs
