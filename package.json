@@ -1,0 +1,18 @@
+{
+  "name": "a11y-starter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Starter repo for the Binclusive CI Accessibility Agent — clone, open a PR, see accessibility findings.",
+  "scripts": {
+    "scan": "a11y-checker check ./src"
+  },
+  "dependencies": {
+    "@mui/material": "^6.0.0",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@binclusive/a11y": "0.1.1",
+    "@types/react": "^18.3.1",
+    "typescript": "^5.8.3"
+  }
+}
