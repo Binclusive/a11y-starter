@@ -9,7 +9,7 @@ import { TextField, Button } from "@mui/material";
 export function SignupForm() {
   return (
     <form>
-      <TextField type="email" value="" onChange={() => {}} />
+      <TextField type="email" value="" onChange={() => {}} fullWidth />
       <Button type="submit">Sign up</Button>
     </form>
   );

@@ -7,7 +7,7 @@ export function Hero() {
   return (
     <section>
       <h1>Welcome</h1>
-      <img src="/hero.png" width={640} height={360} />
+      <img src="/hero.png" width={640} height={360} className="hero" />
     </section>
   );
 }
