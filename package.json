@@ -4,15 +4,24 @@
   "private": true,
   "description": "Starter repo for the Binclusive CI Accessibility Agent — clone, open a PR, see accessibility findings.",
   "scripts": {
-    "scan": "a11y-checker check ./src"
+    "scan": "a11y-checker check ./src",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.0.0",
-    "react": "^18.3.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@binclusive/a11y": "0.1.1",
     "@types/react": "^18.3.1",
-    "typescript": "^5.8.3"
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.11"
   }
 }
