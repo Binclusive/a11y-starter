@@ -25,7 +25,7 @@ jobs:
           # diff fails and nothing gets scanned.
           fetch-depth: 0
       - id: a11y
-        uses: Binclusive/a11y@v0.1.2
+        uses: Binclusive/a11y@v0.1.4
       # Upload only when the scan produced a SARIF file. Gating on the output
       # (empty when the scan step itself failed) avoids a second red — an
       # unconditional always() would run upload-sarif with no sarif_file.
