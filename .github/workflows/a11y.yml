@@ -25,7 +25,11 @@ jobs:
           # diff fails and nothing gets scanned.
           fetch-depth: 0
       - id: a11y
-        uses: Binclusive/a11y@v0.1.4
+        uses: Binclusive/a11y@v0.2.0
+        with:
+          llm-api-key: ${{ secrets.LLM_API_KEY }}
+          llm-provider: anthropic
+          llm-model: claude-haiku-4-5-20251001
       # Upload only when the scan produced a SARIF file. Gating on the output
       # (empty when the scan step itself failed) avoids a second red — an
       # unconditional always() would run upload-sarif with no sarif_file.
