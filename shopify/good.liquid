@@ -1,0 +1,23 @@
+{% comment %}
+  CLEAN control — the same section as bad.liquid, every defect fixed.
+  Binclusive reports ZERO findings here. Note the dynamic alt: a render-time
+  value (alt="{{ ... }}") is treated as present, never flagged.
+{% endcomment %}
+<section class="featured">
+  <img src="{{ 'hero.jpg' | asset_url }}" alt="{{ section.settings.hero_alt }}">
+
+  <h2>Featured products</h2>
+
+  <label for="q">Search products</label>
+  <input type="text" id="q" name="q" placeholder="Search products">
+
+  <iframe
+    src="https://player.example.com/embed/{{ product.id }}"
+    title="Product demo video"></iframe>
+
+  <a href="{{ routes.all_products_collection_url }}">Shop all</a>
+
+  <button type="submit" aria-label="Search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"/></svg>
+  </button>
+</section>

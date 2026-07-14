@@ -1,0 +1,25 @@
+{% comment %}
+  KNOWN-BAD fixture — every element here trips a Binclusive Liquid rule.
+  Compare against good.liquid, which fixes each one.
+{% endcomment %}
+<section class="featured">
+  {# liquid/img-no-alt (WCAG 1.1.1) — image with no alt attribute #}
+  <img src="{{ 'hero.jpg' | asset_url }}">
+
+  {# liquid/empty-heading (WCAG 1.3.1) — heading with no text content #}
+  <h2></h2>
+
+  {# liquid/input-no-label (WCAG 1.3.1 / 4.1.2) — input with no associated label #}
+  <input type="text" name="q" placeholder="Search products">
+
+  {# liquid/iframe-no-title (WCAG 2.4.1 / 4.1.2) — iframe with no title #}
+  <iframe src="https://player.example.com/embed/{{ product.id }}"></iframe>
+
+  {# liquid/positive-tabindex (WCAG 2.4.3) — positive tabindex breaks tab order #}
+  <a href="{{ routes.all_products_collection_url }}" tabindex="5">Shop all</a>
+
+  {# liquid/svg-no-name (WCAG 1.1.1) — inline svg control with no accessible name #}
+  <button type="submit">
+    <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg>
+  </button>
+</section>
