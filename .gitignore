@@ -2,3 +2,14 @@ node_modules/
 *.log
 .DS_Store
 dist/
+
+# iOS / Swift
+.build/
+DerivedData/
+*.xcuserstate
+
+# Android / Gradle
+.gradle/
+android/build/
+android/app/build/
+local.properties
