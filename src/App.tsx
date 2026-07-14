@@ -1,6 +1,7 @@
 import { SignupForm } from "./SignupForm";
 import { CloseButton } from "./IconButton";
 import { Hero } from "./Hero";
+import { MoreLink } from "./MoreLink";
 
 // A tiny sample page. Each child component carries exactly one intentional,
 // clearly-commented accessibility bug for the Binclusive CI check to find on
@@ -11,6 +12,7 @@ export function App() {
       <CloseButton />
       <Hero />
       <SignupForm />
+      <MoreLink />
     </main>
   );
 }
