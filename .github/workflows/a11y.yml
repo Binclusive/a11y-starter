@@ -7,7 +7,10 @@
 # and add it as the repo secret BINCLUSIVE_API_KEY (Settings → Secrets and
 # variables → Actions). See the README for the full walkthrough.
 name: a11y
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -34,8 +37,13 @@ jobs:
           fail-on: warn
         env:
           BINCLUSIVE_API_KEY: ${{ secrets.BINCLUSIVE_API_KEY }}
+          BINCLUSIVE_PROJECT_ID: ${{ vars.BINCLUSIVE_PROJECT_ID }}
+          BINCLUSIVE_API_URL: https://kontrol.binclusive.io/graphql
 
-      - if: always()
+      # SARIF -> Security-tab record on main pushes ONLY. On PRs the branded
+      # binclusive[bot] review is the inline surface, so skip the upload here to
+      # avoid double-posting the same findings as github-advanced-security.
+      - if: always() && github.event_name == 'push'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ steps.a11y.outputs.sarif-file }}
