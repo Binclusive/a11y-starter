@@ -1,11 +1,11 @@
-# The minimal a11y-checker workflow — copy this into your repo as
-# .github/workflows/a11y.yml, open a PR, and findings appear on it.
+# The Binclusive CI Accessibility Agent. On every pull request it scans the
+# changed source (React/TSX, SwiftUI, Android XML, Shopify Liquid), annotates the
+# diff with inline findings, uploads a SARIF report as native code-scanning
+# annotations, and lands each finding as a ticket on your Binclusive dashboard.
 #
-# What runs: the deterministic floor. On every PR it scans the changed .tsx
-# files, posts inline review comments + one rollup comment, and writes a SARIF
-# file that renders as native code-scanning annotations on the diff. No account,
-# no secret, no config required. Advisory by default — the check always exits 0
-# and never blocks a merge.
+# Setup (one time): provision a CI key at app.binclusive.io/<org>/settings/ci-access
+# and add it as the repo secret BINCLUSIVE_API_KEY (Settings → Secrets and
+# variables → Actions). See the README for the full walkthrough.
 name: a11y
 on: pull_request
 
@@ -20,16 +20,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Full history: the scan diffs base...head to find the changed .tsx.
+          # Full history: the scan diffs base...head to find the changed files.
           # The default shallow clone (depth 1) lacks the base commit, so that
           # diff fails and nothing gets scanned.
           fetch-depth: 0
+
       - id: a11y
-        uses: Binclusive/a11y@v0.1.4
-      # Upload only when the scan produced a SARIF file. Gating on the output
-      # (empty when the scan step itself failed) avoids a second red — an
-      # unconditional always() would run upload-sarif with no sarif_file.
-      - if: steps.a11y.outputs.sarif-file != ''
+        uses: Binclusive/a11y@v0
+        with:
+          # Diff against the PR's base so only what this PR changed is scanned.
+          base: ${{ github.event.pull_request.base.sha }}
+          # Advisory: warn-level findings are reported but never block the merge.
+          fail-on: warn
+        env:
+          BINCLUSIVE_API_KEY: ${{ secrets.BINCLUSIVE_API_KEY }}
+
+      - if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ steps.a11y.outputs.sarif-file }}

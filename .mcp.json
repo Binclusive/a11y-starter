@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "binclusive": {
+      "type": "http",
+      "url": "https://mcp.binclusive.io/mcp"
+    }
+  }
+}

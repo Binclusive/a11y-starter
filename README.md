@@ -1,61 +1,135 @@
-# Binclusive CI Accessibility Agent — starter
+# Binclusive Starter
 
-A runnable example: clone this, open a pull request, and watch the Binclusive
-accessibility check find three intentionally-seeded bugs on your diff — inline
-comments, a rollup summary, and native code-scanning annotations. No account, no
-secret, no config. It takes under five minutes.
+A clone-and-run demo of the **Binclusive accessibility engine**. It ships one
+sample surface per stack — React/TSX, SwiftUI, Android XML, Shopify Liquid — and
+each surface has a **known-bad file** with planted defects next to a **clean
+control** with every defect fixed. Open a pull request and watch Binclusive flag
+the bad files, leave the clean ones alone, annotate the diff, and land each
+finding as a ticket on your dashboard.
 
-## Try it
+This repo is the 0→100 walkthrough. Follow the steps below top to bottom.
 
-1. **Use this template** — click **Use this template → Create a new repository**
-   (or fork it). You get your own copy with the workflow already wired up.
-2. **Open a pull request** that touches all three `src/*.tsx` files. The check
-   scans the **changed** `.tsx` files on the PR — the diff, not the whole tree —
-   so to see all three findings, make a trivial edit to each seeded component
-   (keep the bug — e.g. add a blank line or a comment) and push. Touch only one
-   file and you will see only that file's finding.
-3. **Read the findings** on the PR — three surfaces, all on your own GitHub:
+---
 
-   | Where | What you see |
-   |---|---|
-   | **Inline PR comments** | One review comment per finding, on the exact changed line. |
-   | **Rollup comment** | A single summary comment — counts, tiers, the headline. |
-   | **Code-scanning annotations** | The SARIF upload renders findings as native annotations on the diff. |
+## What's in here
 
-   The scan is **advisory by default: it exits 0** and never blocks the merge.
+| Stack | Bad fixture | Clean control | Rules it exercises |
+|-------|-------------|---------------|--------------------|
+| **React / TSX** | `src/Hero.tsx`, `src/IconButton.tsx`, `src/SignupForm.tsx`, `src/MoreLink.tsx` | fix each in place | `jsx-a11y/alt-text`, `jsx-a11y/anchor-has-content`, `enforce/button-no-name`, `enforce/input-no-name` |
+| **SwiftUI** | `ios/BadView.swift` | `ios/GoodView.swift` | `swiftui/image-no-label`, `swiftui/control-no-name`, `swiftui/field-no-label`, `swiftui/color-only-state` |
+| **Android XML** | `android/app/src/main/res/layout/bad_layout.xml` | `.../good_layout.xml` | `android-xml/image-no-label`, `android-xml/control-no-name` |
+| **Shopify Liquid** | `shopify/bad.liquid` | `shopify/good.liquid` | `liquid/img-no-alt`, `liquid/empty-heading`, `liquid/input-no-label`, `liquid/iframe-no-title`, `liquid/positive-tabindex`, `liquid/control-no-name` |
 
-4. **Fix one and watch it clear.** Apply the fix noted in each file's comment,
-   push, and the finding disappears on the next run. That is the full loop:
-   open a PR → see findings → fix → resolved.
+The React defects live *inside* design-system components (MUI `IconButton`,
+`TextField`). A plain `eslint-plugin-jsx-a11y` run is blind to those — Binclusive
+reads the call site through the component and catches them anyway.
 
-## The three seeded bugs
+---
 
-Each `src` component carries exactly one intentional bug, clearly commented, all
-caught by the deterministic floor with no config:
+## 1. Install the CLI
 
-| File | Bug | Rule | WCAG |
-|---|---|---|---|
-| `src/SignupForm.tsx` | Unlabeled input — a `<TextField>` with no label or aria-label | `enforce/input-no-name` | 1.3.1, 3.3.2 |
-| `src/IconButton.tsx` | Icon-only button with no accessible name | `enforce/button-no-name` | 4.1.2 |
-| `src/Hero.tsx` | Image with no `alt` | `jsx-a11y/alt-text` | 1.1.1 |
+```bash
+npm i -g @binclusive/cli
+```
 
-The two `enforce/*` findings live **inside** design-system (`@mui/material`)
-components — the kind a plain `eslint-plugin-jsx-a11y` run walks straight past.
-Reading the call site to catch those is the point of the Binclusive check.
+This gives you the `b8e` command.
 
-## Run it locally too (optional)
+## 2. Log in
+
+```bash
+b8e login
+```
+
+Opens a browser to authenticate against your Binclusive org. One time per machine.
+
+## 3. Wire the project
+
+```bash
+b8e init --all
+```
+
+`init --all` detects your stack and writes everything this repo already has:
+
+- **`binclusive.json`** — the project config (detected stack + enforcement policy).
+- **`.mcp.json`** — registers the Binclusive MCP server for your editor / agent.
+- **`.github/workflows/a11y.yml`** — the CI Accessibility Agent workflow.
+
+Re-running `init` is non-destructive: it preserves any enforcement and
+declarations you've hand-tuned.
+
+## 4. Connect the MCP server
+
+The MCP server is how your editor / coding agent (Claude, Cursor, …) talks to
+Binclusive while you work — audit a file, map the project, ask for a fix.
+
+`b8e init --all` already wrote `.mcp.json`. To connect it in Claude Code
+directly:
+
+```bash
+claude mcp add --transport http binclusive https://mcp.binclusive.io/mcp
+```
+
+Restart your editor afterward; it will open a browser once to authorize.
+
+Once connected, four skills are available in the MCP / editor flow:
+
+- **`map-project`** — inventory the accessibility surface of the whole repo.
+- **`audit-accessibility`** — deep-audit a file or route and explain each finding.
+- **`fix-accessibility`** — propose and apply the fix for a finding.
+- **`shopify-theme-audit`** — Shopify-theme-specific audit across the Liquid set.
+
+## 5. Provision the CI key
+
+CI needs its own key (separate from your login).
+
+1. Go to **`app.binclusive.io/<org>/settings/ci-access`** and create a CI key.
+2. In this repo on GitHub: **Settings → Secrets and variables → Actions → New
+   repository secret**.
+3. Name it **`BINCLUSIVE_API_KEY`** and paste the key.
+
+The workflow reads it from `secrets.BINCLUSIVE_API_KEY` — see
+`.github/workflows/a11y.yml`.
+
+## 6. Open a pull request
+
+Change one of the bad fixtures (or just push this branch) and open a PR. On every
+PR the CI agent:
+
+- **Annotates the diff** — inline review comments on each finding, plus one
+  rollup comment summarizing the run.
+- **Uploads SARIF** — findings render as native GitHub code-scanning annotations
+  on the **Files changed** tab.
+- **Lands dashboard tickets** — each finding becomes a tracked ticket at
+  `app.binclusive.io`, so nothing gets lost when the PR merges.
+
+The workflow is **advisory** (`fail-on: warn`) — findings are reported but never
+block the merge. Tighten enforcement in `binclusive.json` when you're ready.
+
+---
+
+## Try it: fix a bug, watch it clear
+
+Each bad fixture has a `FIX:` comment telling you the one-line change. Fix one,
+push, and watch that finding disappear from the PR while the others stay. Compare
+any bad file against its clean control to see the finished state:
+
+- `ios/BadView.swift` → `ios/GoodView.swift`
+- `android/.../bad_layout.xml` → `android/.../good_layout.xml`
+- `shopify/bad.liquid` → `shopify/good.liquid`
+- `src/*.tsx` → apply each `FIX:` comment in place
+
+Run the deterministic floor locally too:
 
 ```bash
 pnpm install
 pnpm scan
 ```
 
-It prints the same findings your PR will show.
+---
 
-## More
+## Links
 
-- Full CI quickstart, the optional lanes (AI enrichment, merge gating, branded
-  comments, dashboard ingest), and supply-chain pinning:
-  **[Binclusive/a11y → docs/QUICKSTART-CI.md](https://github.com/Binclusive/a11y/blob/main/docs/QUICKSTART-CI.md)**
-- The action itself: **[Binclusive/a11y](https://github.com/Binclusive/a11y)**
-  (this repo pins the released tag `Binclusive/a11y@v0.1.1`).
+- Dashboard: `app.binclusive.io`
+- CI access / keys: `app.binclusive.io/<org>/settings/ci-access`
+- MCP endpoint: `https://mcp.binclusive.io/mcp`
+- The action: [Binclusive/a11y](https://github.com/Binclusive/a11y)

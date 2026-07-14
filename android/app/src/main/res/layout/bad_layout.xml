@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  KNOWN-BAD fixture — every widget here trips a Binclusive Android rule.
+  Compare against good_layout.xml, which fixes each one.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- android-xml/image-no-label (WCAG 1.1.1) — ImageView, no contentDescription -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:src="@drawable/product_hero" />
+
+    <!-- android-xml/image-no-label + android-xml/control-no-name -->
+    <!-- ImageButton with no contentDescription: unlabeled image AND unnamed control -->
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_share" />
+
+    <!-- android-xml/control-no-name (WCAG 4.1.2) — clickable row, no labeled child -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron" />
+    </LinearLayout>
+</LinearLayout>

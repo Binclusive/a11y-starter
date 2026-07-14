@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  CLEAN control — the same layout as bad_layout.xml, every defect fixed.
+  Binclusive reports ZERO findings here.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- informative image carries a contentDescription -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:src="@drawable/product_hero"
+        android:contentDescription="@string/product_hero_desc" />
+
+    <!-- the control is named for its action -->
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_share"
+        android:contentDescription="@string/share" />
+
+    <!-- the clickable row has a text child that supplies its name; the -->
+    <!-- decorative chevron opts out with contentDescription="@null" -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/open_details" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron"
+            android:contentDescription="@null" />
+    </LinearLayout>
+</LinearLayout>
