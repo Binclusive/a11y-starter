@@ -1,18 +1,23 @@
-# The Binclusive CI Accessibility Agent. On every pull request it scans the
-# changed source (React/TSX, SwiftUI, Android XML, Shopify Liquid), annotates the
-# diff with inline findings, uploads a SARIF report as native code-scanning
-# annotations, and lands each finding as a ticket on your Binclusive dashboard.
+# Binclusive CI Accessibility Agent.
+# On a pull request: scans the changed source, posts branded binclusive[bot] inline
+#   reviews, and lands each finding as a ticket on your Binclusive dashboard.
+# On push to main: uploads SARIF so findings show in the GitHub Security tab.
+# The two surfaces are split so a PR is NOT double-annotated (branded bot = the PR
+#   inline surface; SARIF/code-scanning = the Security-tab record only).
 #
-# Setup (one time): provision a CI key at app.binclusive.io/<org>/settings/ci-access
-# and add it as the repo secret BINCLUSIVE_API_KEY (Settings → Secrets and
-# variables → Actions). See the README for the full walkthrough.
+# Setup (one time): provision a CI key at app.binclusive.io/<org>/settings/ci-access,
+# add it as the repo secret BINCLUSIVE_API_KEY, and set BINCLUSIVE_PROJECT_ID as a repo
+# variable (Settings -> Secrets and variables -> Actions).
 name: a11y
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
-  pull-requests: write   # inline review comments + rollup comment
-  security-events: write # upload SARIF as code-scanning annotations
+  pull-requests: write   # branded binclusive[bot] inline reviews
+  security-events: write # SARIF upload on main
 
 jobs:
   a11y:
@@ -20,22 +25,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Full history: the scan diffs base...head to find the changed files.
-          # The default shallow clone (depth 1) lacks the base commit, so that
-          # diff fails and nothing gets scanned.
           fetch-depth: 0
 
       - id: a11y
         uses: Binclusive/a11y@v0
         with:
-          # Diff against the PR's base so only what this PR changed is scanned.
           base: ${{ github.event.pull_request.base.sha }}
-          # Advisory: warn-level findings are reported but never block the merge.
           fail-on: warn
         env:
           BINCLUSIVE_API_KEY: ${{ secrets.BINCLUSIVE_API_KEY }}
+          BINCLUSIVE_PROJECT_ID: ${{ vars.BINCLUSIVE_PROJECT_ID }}
+          BINCLUSIVE_API_URL: https://kontrol.binclusive.io/graphql
 
-      - if: always()
+      # Security-tab record on main pushes ONLY -- skipped on PRs so the branded
+      # bot is the single inline surface (no github-advanced-security double-post).
+      - if: always() && github.event_name == 'push'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ steps.a11y.outputs.sarif-file }}
