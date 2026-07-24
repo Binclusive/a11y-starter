@@ -35,7 +35,6 @@ jobs:
         env:
           BINCLUSIVE_API_KEY: ${{ secrets.BINCLUSIVE_API_KEY }}
           BINCLUSIVE_PROJECT_ID: ${{ vars.BINCLUSIVE_PROJECT_ID }}
-          BINCLUSIVE_API_URL: https://kontrol.binclusive.io/graphql
 
       # Security-tab record on main pushes ONLY -- skipped on PRs so the branded
       # bot is the single inline surface (no github-advanced-security double-post).
