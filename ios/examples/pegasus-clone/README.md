@@ -23,7 +23,7 @@ open PegasusClone.xcodeproj      # Xcode 16+, iOS 17+, simulator only
 | Route picker | `PegasusClone/Bad/BadRouteSelectionView.swift` | "Rota seçiniz" sheet with live airport search |
 | Date picker | `PegasusClone/Bad/BadDateSelectionView.swift` | "Tarih Seçimi" price calendar |
 | Results | `PegasusClone/Bad/BadFlightResultsView.swift` | "Gidiş uçuşları" flight list |
-| Passengers | `PegasusClone/Bad/BadPassengerView.swift` | stepper sheet |
+| Passengers | `PegasusClone/Bad/BadPassengerView.swift` | "Yolcu Seçimi" stepper sheet |
 
 Every defect carries an inline tag naming the rule and the WCAG criterion:
 
@@ -50,9 +50,10 @@ Text(state.originText)
 | `swiftui/hidden-content` | 3 | logo, notification bell and campaign banner are invisible to VoiceOver |
 | `swiftui/decorative-image-exposed` | 3 | chevrons and route-line glyphs are focusable |
 | `swiftui/reading-order` | 2 | search results land last; the profile pill is announced after the page body |
-| `swiftui/color-only-state` | 2 | sold-out flights are conveyed by 45% opacity alone |
+| `swiftui/color-only-state` | 1 | sold-out flights are conveyed by 45% opacity alone |
 | `swiftui/untranslated-label` | 1 | swap control is named `change route` in a Turkish UI |
 | `swiftui/split-element` | 1 | a calendar day and its fare are two separate stops |
+| `swiftui/no-disabled-state` | 1 | the stepper minus looks and reads identically at its lower bound |
 | `swiftui/small-touch-target` | 1 | ~24pt swap control |
 | `swiftui/over-grouped` | 1 | greeting + points + account button welded into one element |
 | `swiftui/fixed-font-size` | 1 | hard-coded sizes with `lineLimit(1)` |

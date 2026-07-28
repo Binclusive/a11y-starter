@@ -32,9 +32,11 @@ struct BadRootView: View {
                 BadFlightResultsView()
             }
         }
-        .sheet(isPresented: $state.showRouteSheet) { BadRouteSelectionView() }
-        .sheet(isPresented: $state.showDateSheet) { BadDateSelectionView() }
-        .sheet(isPresented: $state.showPassengerSheet) { BadPassengerView() }
+        // presented full screen, as in the shipping app: the yellow header runs
+        // all the way up under the status bar with no card inset
+        .fullScreenCover(isPresented: $state.showRouteSheet) { BadRouteSelectionView() }
+        .fullScreenCover(isPresented: $state.showDateSheet) { BadDateSelectionView() }
+        .fullScreenCover(isPresented: $state.showPassengerSheet) { BadPassengerView() }
     }
 
     @ViewBuilder

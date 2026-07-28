@@ -43,7 +43,6 @@ final class AppState: ObservableObject {
         case .adult:   return passengers.adults
         case .child:   return passengers.children
         case .infant:  return passengers.infants
-        case .student: return passengers.students
         }
     }
 
@@ -53,7 +52,6 @@ final class AppState: ObservableObject {
         case .adult:   passengers.adults = clamped
         case .child:   passengers.children = clamped
         case .infant:  passengers.infants = clamped
-        case .student: passengers.students = clamped
         }
     }
 

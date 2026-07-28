@@ -48,22 +48,20 @@ struct PassengerCounts: Equatable {
     var adults = 1
     var children = 0
     var infants = 0
-    var students = 0
 
-    var total: Int { adults + children + infants + students }
+    var total: Int { adults + children + infants }
 
     var summary: String {
         var parts: [String] = []
         if adults > 0 { parts.append("\(adults) Yetişkin") }
         if children > 0 { parts.append("\(children) Çocuk") }
         if infants > 0 { parts.append("\(infants) Bebek") }
-        if students > 0 { parts.append("\(students) Öğrenci") }
         return parts.isEmpty ? "Yolcu seçiniz" : parts.joined(separator: ", ")
     }
 }
 
 enum PassengerKind: String, CaseIterable, Identifiable {
-    case adult, child, infant, student
+    case adult, child, infant
 
     var id: String { rawValue }
 
@@ -72,16 +70,14 @@ enum PassengerKind: String, CaseIterable, Identifiable {
         case .adult:   return "Yetişkin"
         case .child:   return "Çocuk"
         case .infant:  return "Bebek"
-        case .student: return "Öğrenci"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .adult:   return "12 yaş ve üzeri"
-        case .child:   return "2 - 12 yaş arası"
-        case .infant:  return "0 - 2 yaş arası"
-        case .student: return "12 yaş ve üzeri öğrenci"
+        case .adult:  return "(12+ Yaş)"
+        case .child:  return "(2-11 Yaş)"
+        case .infant: return "(2 yaş altı)"
         }
     }
 }
