@@ -36,8 +36,9 @@ jobs:
         env:
           BINCLUSIVE_API_KEY: ${{ secrets.BINCLUSIVE_API_KEY }}
           BINCLUSIVE_PROJECT_ID: ${{ vars.BINCLUSIVE_PROJECT_ID }}
-          # Which deployment this scan covers. A scan cannot infer it, and `production` is the
-          # dashboard's default filter -- so an unstamped run would land in your most-trusted view.
+          # Which deployment this scan covers. A scan cannot infer it, so a run that does not
+          # declare it is refused rather than guessed into `production` -- the dashboard's
+          # default filter, and the last place a wrong guess should land.
           BINCLUSIVE_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'pr' || 'production' }}
 
       # Security-tab record on main pushes ONLY -- skipped on PRs so the branded
