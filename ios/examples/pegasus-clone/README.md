@@ -67,10 +67,16 @@ so they are the *last* node in the tree even though they cover the top of the
 screen — and the list underneath is never hidden. Measured: typing "Dub" puts the
 first result at index 153, after all 34 airport rows.
 
-**The price calendar reads every date away from its price.** `LazyVGrid` sorts
-children by position, and a day number and its fare sit at different heights, so
-VoiceOver sweeps the whole row of numbers and only then the whole row of prices:
-`"6" "7" "8" "9" "10" "11" "12" "—" "—" …`.
+**A calendar day and its fare are two separate stops.** Each cell reads `"30"`
+and then a bare `"6,400"` — no currency, no date, nothing tying the number to the
+day it belongs to. The user has to infer the association from the order alone.
+
+The order itself was worth fixing to stay faithful: left to itself `LazyVGrid`
+sorts children by position, and a day number and its fare sit at different
+heights, so VoiceOver swept the whole row of dates and only then the whole row of
+fares — `"6" "7" "8" "9" "10" "11" "12" "—" "—" …`. Grouping each cell as an
+accessibility container restores date → fare → next date, which is what the
+shipping app does.
 
 ## What is deliberately correct
 
