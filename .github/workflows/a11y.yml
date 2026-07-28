@@ -7,7 +7,8 @@
 #
 # Setup (one time): provision a CI key at app.binclusive.io/<org>/settings/ci-access,
 # add it as the repo secret BINCLUSIVE_API_KEY, and set BINCLUSIVE_PROJECT_ID as a repo
-# variable (Settings -> Secrets and variables -> Actions).
+# variable (Settings -> Secrets and variables -> Actions). That is the whole setup --
+# BINCLUSIVE_ENVIRONMENT below is derived from the trigger, so there is nothing else to add.
 name: a11y
 on:
   pull_request:
@@ -35,6 +36,9 @@ jobs:
         env:
           BINCLUSIVE_API_KEY: ${{ secrets.BINCLUSIVE_API_KEY }}
           BINCLUSIVE_PROJECT_ID: ${{ vars.BINCLUSIVE_PROJECT_ID }}
+          # Which deployment this scan covers. A scan cannot infer it, and `production` is the
+          # dashboard's default filter -- so an unstamped run would land in your most-trusted view.
+          BINCLUSIVE_ENVIRONMENT: ${{ github.event_name == 'pull_request' && 'pr' || 'production' }}
 
       # Security-tab record on main pushes ONLY -- skipped on PRs so the branded
       # bot is the single inline surface (no github-advanced-security double-post).
