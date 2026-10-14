@@ -14,7 +14,7 @@ fun ProductScreen(onAddToBag: () -> Unit) {
         Text("Everyday tote")
         Text("Cotton canvas")
         Button(onClick = onAddToBag) {
-            Icon(Icons.Filled.Add, contentDescription = null)
+            Icon(Icons.Filled.Add, contentDescription = "Add to bag")
         }
     }
 }
