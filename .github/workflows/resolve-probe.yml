@@ -25,3 +25,10 @@ jobs:
       contents: write
     steps:
       - *probe
+  pr-write-contents-read:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - *probe
