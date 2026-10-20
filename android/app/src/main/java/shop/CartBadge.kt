@@ -18,10 +18,11 @@ fun CartBadge(count: Int, onOpenCart: () -> Unit) {
     Row {
         Image(
             painter = painterResource(id = R.drawable.cart),
+            contentDescription = "Cart",
         )
         Box(
             modifier = Modifier
-                .size(40.dp)
+                .size(48.dp)
                 .clip(CircleShape)
                 .clickable { onOpenCart() },
         ) {
