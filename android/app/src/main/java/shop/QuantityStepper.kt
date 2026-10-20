@@ -14,11 +14,12 @@ import androidx.compose.ui.res.painterResource
 fun QuantityStepper(quantity: Int, onDecrease: () -> Unit) {
     Row {
         IconButton(onClick = onDecrease) {
-            Icon(Icons.Filled.Remove, contentDescription = null)
+            Icon(Icons.Filled.Remove, contentDescription = "Remove one")
         }
         Text("$quantity")
         Image(
             painter = painterResource(id = R.drawable.everyday_tote),
+            contentDescription = "Everyday tote",
         )
     }
 }
